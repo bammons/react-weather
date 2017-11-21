@@ -13,7 +13,6 @@
   background-color: $primary-grey;
   border-radius: 5px;
   border: 1px solid $black;
-  -webkit-border-radius: 5px;
   padding: 35px;
   opacity: 0.6;
 }
@@ -26,10 +25,6 @@
   &:hover {
     color: $secondary-font;
   }
-}
-
-.weather__temp {
-
 }
 
 .weather__temp--high {

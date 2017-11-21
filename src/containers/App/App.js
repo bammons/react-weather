@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
 import LocaleSelector from '../../components/LocaleSelector/LocaleSelector';
 import WeatherDisplay from '../../components/WeatherDisplay/WeatherDisplay';
-import { initialize, getWeatherData } from '../../actions/actions';
+import { initialize, selectCountry, selectCity, getWeatherData } from '../../actions/actions';
 import { connect } from 'react-redux'
 import './App.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    props.store.dispatch(initialize(props.countryData));
+    props.initializeDispatch(props.countryData);
     this.handleFetchWeatherData = this.handleFetchWeatherData.bind(this);
   }
 
   handleFetchWeatherData(city, country) {
-    var queryString = city + ',' + this.props.locale.codes[country];
-    this.props.store.dispatch(getWeatherData({q: queryString}));
+    this.props.selectCityDispatch(city, {q: `${city},${this.props.locale.data.codes[country]}`});
   }
 
   render() {
     return (
       <div className="App">
-        <LocaleSelector locale={this.props.locale} onSelection={this.handleFetchWeatherData}>
+        <LocaleSelector locale={this.props.locale} onSelection={this.handleFetchWeatherData} onCountrySelected={this.props.selectCountryDispatch}>
         </LocaleSelector>
         <WeatherDisplay weather={this.props.weather}>
         </WeatherDisplay>
@@ -30,13 +28,18 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  store: PropTypes.object.isRequired
-};
+const mapDispatchToProps = dispatch => ({
+  initializeDispatch: data => { dispatch(initialize(data)); },
+  selectCountryDispatch: country => { dispatch(selectCountry(country)); },
+  selectCityDispatch: (city, query) => {
+    dispatch(selectCity(city));
+    dispatch(getWeatherData(query));
+  }
+});
 
 const mapStateToProps = state => ({
   locale: state.localeSelect,
   weather: state.fetchWeather
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

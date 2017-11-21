@@ -19,7 +19,7 @@ fetch(`${process.env.PUBLIC_URL}/countries.json`)
         <div>
           <Route exact path="/" render={(props) => {
             return (
-              <App {...props} countryData={data} store={store}/>
+              <App countryData={data} />
             );
           }}/>
         </div>

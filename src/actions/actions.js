@@ -28,7 +28,7 @@ export function pushWeatherData(data) {
 
 export function getWeatherData(query) {
   return dispatch => {
-    return getWeather(query, function(data) {
+    return getWeather(query).then(data => {
       dispatch(pushWeatherData(data));
     });
   }

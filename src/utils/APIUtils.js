@@ -1,30 +1,29 @@
 import request from 'superagent';
-import { assign } from 'lodash';
 
 import config from '../config';
 
 const APIUtils = {
 
-  get: function (query, done) {
+  get (query) {
     const url = `${config.apiBaseUrl}`;
-
-    query = assign(query, {
+    query = Object.assign(query, {
       APPID: config.apiKey
     });
+    return new Promise((resolve, reject) => {
+      request.get(url)
+        .query(query)
+        .end((err, res) => {
+          if (err) {
+            if (err.status) {
+              err.statusCode = err.status;
+            }
 
-    request.get(url)
-      .query(query)
-      .end((err, res) => {
-        if (err) {
-          if (err.status) {
-            err.statusCode = err.status;
+            reject(err);
           }
 
-          return done(err);
-        }
-
-        done(res.body);
-      });
+          resolve(res.body);
+        });
+    });
   }
 };
 

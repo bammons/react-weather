@@ -10,6 +10,7 @@ class WeatherDisplay extends Component {
   }
 
   getWeatherContent() {
+    console.log('rerender weather');
     return (
       <div className="weather">
         <i className={`wi wi-owm-${this.props.weather.weather.id}`}></i>
